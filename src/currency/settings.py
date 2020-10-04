@@ -115,8 +115,48 @@ STATIC_URL = '/static/'
 
 CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_BEAT_SCHEDULE = {
-    'parse': {
+    'parse1': {
         'task': 'rate.tasks.parse_privatbank',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse2': {
+        'task': 'rate.tasks.parse_monobank',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse3': {
+        'task': 'rate.tasks.parse_vkurse',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse4': {
+        'task': 'rate.tasks.parse_fixer',
+        'schedule': crontab(minute='*/1'),  # free version hes a limit of 1000 request per manth
+    },
+    'parse5': {
+        'task': 'rate.tasks.parse_oschadbank',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse6': {
+        'task': 'rate.tasks.parse_prostobank',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse7': {
+        'task': 'rate.tasks.parse_minfin',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse8': {
+        'task': 'rate.tasks.parse_ukrgasbank',
+        'schedule': crontab(minute='*/1'),  # free version hes a limit of 1000 request per manth
+    },
+    'parse9': {
+        'task': 'rate.tasks.parse_pumb',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse10': {
+        'task': 'rate.tasks.parse_pravex',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse11': {
+        'task': 'rate.tasks.parse_alpha',
         'schedule': crontab(minute='*/1'),
     },
 }

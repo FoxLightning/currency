@@ -9,6 +9,16 @@ class Rate(models.Model):
 
     SOURCE_CHOICES = (
         (1, 'PrivatBank'),
+        (2, 'MonoBank'),
+        (3, 'Vkurse'),
+        (4, 'fixer'),
+        (5, 'oschadbank'),
+        (6, 'prostobank'),
+        (7, 'minfin'),
+        (8, 'ukrgazbank'),
+        (9, 'pumb'),
+        (10, 'pravex'),
+        (11, 'alphabank'),
     )
 
     currency = models.PositiveSmallIntegerField(choices=CURRENCY_CHOICES)
