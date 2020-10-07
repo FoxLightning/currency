@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <form action="{% url 'rate:feedback' %}" method='POST'>
+        {% csrf_token %} 
+        <br>
+        <br>
+        <h1>AVG rating: {{ rating }} (10)</h1>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

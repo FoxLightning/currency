@@ -1,2 +1,4 @@
 .venv
-.vscode
+DB.session.sql
+__pycache__/
+passwords.py

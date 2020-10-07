@@ -1,2 +1,1 @@
-SELECT * FROM rate_rate WHERE currency == 1
-
+SELECT * FROM rate_feedback
