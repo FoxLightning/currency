@@ -2,6 +2,9 @@ import os
 
 from celery.schedules import crontab
 
+
+SITE_ID = 1
+
 # EMAIL SETTINGS
 EMAIL_HOST_USER = 'battlefieldblo@gmail.com'
 EMAIL_HOST_PASSWORD = '7494496asdfAA1'
@@ -41,12 +44,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'debug_toolbar',
     'django_extensions',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'rate',
 ]
+
+LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,10 +88,23 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
+
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '123',
+            'secret': '456',
+            'key': '654'
+        }
+    }
+}
 
 WSGI_APPLICATION = 'currency.wsgi.application'
 
