@@ -10,12 +10,34 @@ class Rate(models.Model):
     sale = models.DecimalField(max_digits=6, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        # max recursion depth if i try to use get_source_display
+        return f"{self.source} {self.currency}"
+
+    class Meta:
+        verbose_name = "Rate"
+        verbose_name_plural = "Rates"
+
 
 class ContactUs(models.Model):
     email = models.EmailField()
     subject = models.CharField(max_length=128)
     massage = models.TextField()
 
+    def __str__(self):
+        return self.subject
+
+    class Meta:
+        verbose_name = "Massage"
+        verbose_name_plural = "Massages"
+
 
 class Feedback(models.Model):
     rating = models.PositiveSmallIntegerField(choices=choices.OPTIONS)
+
+    def __str__(self):
+        return self.rating
+
+    class Meta:
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedbacks"
