@@ -1,5 +1,5 @@
 from django.db import models
-from rate import choices
+
 from . import choices
 
 

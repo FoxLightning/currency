@@ -1,1 +1,1 @@
-SELECT * FROM rate_feedback
+DELETE FROM rate_feedback

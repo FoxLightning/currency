@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 
 from celery import shared_task
 
-from django.core.mail import send_mail
-
 
 import requests
 
@@ -21,8 +19,8 @@ def send_email_async(subject, text):
         fail_silently=False,
     )
 
-# Currency parsing 
 
+# Currency parsing
 TWOPLACES = Decimal(10) ** -2
 
 

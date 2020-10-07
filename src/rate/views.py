@@ -1,11 +1,12 @@
-from django.views.generic import ListView, CreateView
-from .models import ContactUs, Rate, Feedback
-from django.urls import reverse_lazy
-from . forms import FeedbackForm
-from django.shortcuts import render, redirect, render_to_response 
-from django.template import RequestContext
 from django.db.models import Avg
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView
+
+from .forms import FeedbackForm
+from .models import ContactUs, Feedback, Rate
 from .tasks import send_email_async
+
 
 class RateListView(ListView):
     queryset = Rate.objects.all().order_by('sale')
@@ -23,8 +24,7 @@ class CreateContactUsView(CreateView):
     def form_valid(self, form):
         if form.is_valid():
             data = form.cleaned_data
-            send_email_async.delay(data['subject'],f"sander:{data['email']}\n{data['massage']}")
-            
+            send_email_async.delay(data['subject'], f"sander:{data['email']}\n{data['massage']}")
         return super().form_valid(form)
 
 
@@ -45,4 +45,3 @@ def showrating(request):
     rating = round(Feedback.objects.all().aggregate(Avg('rating'))['rating__avg'], 2)
     context = {'rating': rating}
     return render(request, 'rate/rating.html', context=context)
-    

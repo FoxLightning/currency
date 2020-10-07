@@ -32,7 +32,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('currency', models.PositiveSmallIntegerField(choices=[(1, 'USD'), (2, 'UER')])),
-                ('source', models.PositiveSmallIntegerField(choices=[(1, 'PrivatBank'), (2, 'MonoBank'), (3, 'Vkurse'), (4, 'Fixer'), (5, 'Oschadbank'), (6, 'Prostobank'), (7, 'Minfin'), (8, 'Ukrgazbank'), (9, 'Pumb'), (10, 'Pravex'), (11, 'Alphabank')])),
+                ('source', models.PositiveSmallIntegerField(choices=[
+                    (1, 'PrivatBank'), (2, 'MonoBank'), (3, 'Vkurse'),
+                    (4, 'Fixer'), (5, 'Oschadbank'), (6, 'Prostobank'),
+                    (7, 'Minfin'), (8, 'Ukrgazbank'), (9, 'Pumb'),
+                    (10, 'Pravex'), (11, 'Alphabank')])),
                 ('buy', models.DecimalField(decimal_places=2, max_digits=6)),
                 ('sale', models.DecimalField(decimal_places=2, max_digits=6)),
                 ('created', models.DateTimeField(auto_now_add=True)),
