@@ -1,7 +1,9 @@
 from django.db.models import Avg
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, DetailView, ListView
+
+from django.contrib.auth.models import User
 
 from .forms import FeedbackForm
 from .models import ContactUs, Feedback, Rate
@@ -28,20 +30,22 @@ class CreateContactUsView(CreateView):
         return super().form_valid(form)
 
 
-def feedback(request):
+class FeedbackView(CreateView):
+    success_url = reverse_lazy('index')
+    model = Feedback
+    fields = ('rating', 'user_id')
 
-    form = FeedbackForm(request.POST)
-    if request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            result = form.cleaned_data.get('rating')
-            Feedback.objects.create(rating=int(result))
-            return redirect('rate:showrating')
-    context = {'form': form}
-    return render(request, 'rate/feedback_form.html', context=context)
+
+class FeedbackShowView(ListView):
+    queryset = Feedback.objects.all()
 
 
 def showrating(request):
-    rating = round(Feedback.objects.all().aggregate(Avg('rating'))['rating__avg'], 2)
-    context = {'rating': rating}
+    queryset = Feedback.objects.all()
+    rating = round(queryset.aggregate(Avg('rating'))['rating__avg'], 2)
+    count_rate = queryset.count()
+    context = {
+        'rating': rating,
+        'count': count_rate,
+        }
     return render(request, 'rate/rating.html', context=context)

@@ -5,7 +5,7 @@
     <div class="col">
       <form action="{% url 'rate:feedback' %}" method='POST'>
         {% csrf_token %} 
-        {{ form.as_p }}
+        {{ form.as_p }} <br>
         <button type="submit" class="btn btn-primary">Primary</button>
       </form>
     </div>

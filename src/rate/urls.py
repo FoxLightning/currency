@@ -9,6 +9,6 @@ urlpatterns = [
     path('list/', views.RateListView.as_view(), name='list'),
     path('contactus/list', views.ContactUsListView.as_view(), name='contactuslist'),
     path('contactus/create', views.CreateContactUsView.as_view(), name='contactuscreate'),
-    path('feedback/', views.feedback, name='feedback'),
-    path('showrating/', views.showrating, name='showrating')
+    path('feedback/', views.FeedbackView.as_view(), name='feedback'),
+    path('showrating/', views.FeedbackShowView.as_view(), name='showrating')
 ]
