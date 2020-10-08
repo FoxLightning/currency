@@ -35,6 +35,11 @@ class FeedbackView(CreateView):
     model = Feedback
     fields = ('rating', 'user_id')
 
+    # def form_valid(self, form):
+    #     if form.is_valid():
+    #         FeedbackForm.objects.create(rating=form.rating, user_id=user.id)
+    #     return super().form_valid(form)
+
 
 class FeedbackShowView(ListView):
     queryset = Feedback.objects.all()
