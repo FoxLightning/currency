@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from . import views
 
@@ -10,5 +11,6 @@ urlpatterns = [
     path('contactus/list', views.ContactUsListView.as_view(), name='contactuslist'),
     path('contactus/create', views.CreateContactUsView.as_view(), name='contactuscreate'),
     path('feedback/', views.FeedbackView.as_view(), name='feedback'),
-    path('showrating/', views.FeedbackShowView.as_view(), name='showrating')
+    path('showrating/', views.FeedbackShowView.as_view(), name='showrating'),
+    path('error/', TemplateView.as_view(template_name='rate/error.html'), name='error'),
 ]
