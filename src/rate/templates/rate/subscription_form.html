@@ -4,13 +4,12 @@
   <div class="row">
     <div class="col">
       <br><br><br>
-      <form action="{% url 'rate:feedback' %}" method='POST'>
+      <form action="{% url 'rate:subscription' %}" method='POST'>
         {% csrf_token %} 
-        {{ form.as_p}}
+        {{ form }}
+
         <button type="submit" class="btn btn-primary">Primary</button>
       </form>
     </div>
   </div>
 {% endblock content %}
-
-

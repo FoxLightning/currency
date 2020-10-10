@@ -13,4 +13,7 @@ urlpatterns = [
     path('feedback/', views.FeedbackView.as_view(), name='feedback'),
     path('showrating/', views.FeedbackShowView.as_view(), name='showrating'),
     path('error/', TemplateView.as_view(template_name='rate/error.html'), name='error'),
+    path('sublist/', views.SubListView.as_view(), name='sublist'),
+    path('dellsub/<int:pk>', views.subdel, name='dellsub'),
+    path('addsubscription/', views.AddSubView.as_view(), name='addsubscription'),
 ]

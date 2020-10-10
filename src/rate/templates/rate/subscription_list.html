@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div class='row'>
+    <div class='col'>
+      <table class="table">
+        <br>
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Bank</th>
+            <th scope="col">
+              <a href="{% url 'rate:addsubscription' %}">Add</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in subscription_list %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ row.get_banks_display }}</td>
+            <td>
+              <a href="{% url 'rate:dellsub' row.id %}">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content%}

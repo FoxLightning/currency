@@ -1,1 +1,1 @@
-DELETE FROM rate_feedback
+DROP TABLE rate_subscription

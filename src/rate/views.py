@@ -1,10 +1,12 @@
 from django.db.models import Avg
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView
+from django.views.generic import CreateView, ListView, TemplateView, DeleteView
 
-from .models import ContactUs, Feedback, Rate
+from .models import ContactUs, Feedback, Rate, Subscription
 from .tasks import send_email_async
+
+from .forms import SubscriptionForm
 
 
 class RateListView(ListView):
@@ -38,13 +40,12 @@ class FeedbackView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        if self.request.user.id in [i.user_id for i in Feedback.objects.all()]:
-            self.error = 'you are allready voted'
+        if self.request.user.id in (i.user_id_id for i in Feedback.objects.all()):
             return redirect('rate:error')
         else:
             Feedback.objects.create(
                 rating=form.cleaned_data['rating'],
-                user_id=self.request.user.id,
+                user_id=self.request.user,
                 )
             return redirect('rate:showrating')
 
@@ -64,3 +65,35 @@ class ErrorView(TemplateView):
     def get_context_data(self, **kwargs):
         kwargs['error'] = 'You are allready voted'
         return super().get_context_data(**kwargs)
+
+
+class SubListView(ListView):
+    queryset = None
+    pk_url_kwarg = ('pk', 'id')
+
+    def get_queryset(self):
+        if self.queryset is None:
+            queryset = Subscription.objects.filter(user=self.request.user)
+        return queryset
+
+
+def subdel(request, pk):
+    Subscription.objects.filter(id=pk, user=request.user).delete()
+    return redirect('rate:sublist')
+
+
+class AddSubView(CreateView):
+    success_url = reverse_lazy('rate:sublist')
+    model = Subscription
+    fields = ('banks',)
+    template_name = 'rate/addsubscription_create.html'
+
+    def form_valid(self, form):
+        bunks = form.cleaned_data['banks']
+        user = self.request.user
+        if bunks not in (i.banks for i in self.model.objects.filter(user=user)):
+            self.model.objects.create(
+                user=self.request.user,
+                banks=bunks,
+                )
+        return redirect('rate:sublist')
