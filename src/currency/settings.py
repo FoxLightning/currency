@@ -207,4 +207,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'rate.tasks.parse_alpha',
         'schedule': crontab(minute='*/1'),
     },
+    'send_xml_to_all_async': {
+        'task': 'rate.tasks.send_xml_to_all_async',
+        'schedule': crontab(minute='*/1')
+    }
 }

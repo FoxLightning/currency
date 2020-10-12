@@ -1,7 +1,9 @@
 from django.db.models import Avg
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, TemplateView, DeleteView
+
+from .forms import SubscriptionForm
 
 from .models import ContactUs, Feedback, Rate, Subscription
 from .tasks import send_email_async
@@ -97,3 +99,25 @@ class AddSubView(CreateView):
                 banks=bunks,
                 )
         return redirect('rate:sublist')
+
+
+def addsub(request): 
+    form = SubscriptionForm(request.POST or None)
+    context = {'form': form}
+    if request.POST:
+        if form.is_valid():
+            user = request.user
+            choices = form.cleaned_data.get("banks")
+            sub_banks = [i.banks for i in Subscription.objects.filter(user=user)]
+            for bank in map(int, choices):
+                if bank not in sub_banks:
+                    Subscription.objects.create(
+                        user=user,
+                        banks=bank,
+                    )
+        return redirect('rate:sublist')
+    return render(
+        request,
+        'rate/addsubscription_create.html',
+        context=context
+        )

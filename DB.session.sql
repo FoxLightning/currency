@@ -1,1 +1,1 @@
-DROP TABLE rate_subscription
+SELECT * FROM rate_rate ORDER BY created

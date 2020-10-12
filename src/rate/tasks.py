@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 from celery import shared_task
 
+from rate.utils import send_xml_to_all
 
 import requests
 
@@ -223,3 +224,8 @@ def parse_alpha():
 
     check_and_write(1, source, usd_buy, usd_sale)
     check_and_write(2, source, eur_buy, eur_sale)
+
+
+@shared_task
+def send_xml_to_all_async():
+    send_xml_to_all()

@@ -1,13 +1,85 @@
-# from bs4 import BeautifulSoup, NavigableString
+from io import BytesIO
+
+from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
+
+from rate.models import Rate, Subscription
+
+import xlwt
 
 
-# import requests
+def display(obj, attr: str) -> str:
+    get_display = f'get_{attr}_display'
+
+    if hasattr(obj, get_display):
+        return getattr(obj, get_display)()
+
+    return str(getattr(obj, attr))
 
 
-# html_doc = requests.get('https://alfabank.ua/currency-exchange')
+def last_rates() -> list:
+    """
+    Return all last rates of all banks and currency
+    """
+    # Это легально вообще?
+    query = Rate.objects.raw(
+        """
+        SELECT id, source, currency, buy, sale, MAX(created)
+        FROM rate_rate
+        GROUP BY source, currency
+        """
+    )
+    # Как добавить поля, возвращает только currency, source и created
+    # a = Rate.objects.values('currency', 'source').annotate(created=Max('created'))
+    return list(query)
 
-# soup = BeautifulSoup(html_doc.text, 'html.parser')
 
-# rows = soup.find_all('span', {'class': 'rate-number'})
+def user_rates(user) -> list:
+    """
+    Return last rates for banks in subscription of chosen user
+    """
+    query_sources = Subscription.objects.filter(user=user).only('banks')
+    user_sources = [i.banks for i in query_sources]
+    user_rates = [i for i in filter(lambda x: x.source in user_sources, last_rates())]
+    return user_rates
 
-# usd_buy, usd_sale, eur_buy, eur_sale = [float(i.text) for i in rows][:4]
+
+def create_xml(query):
+    """
+    Create xml from queryset, include all fields in models
+    """
+    excelfile = BytesIO()
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Rates')
+
+    fields = [i for i in Rate._meta.fields]
+
+    for col, field in enumerate(fields):
+        ws.write(0, col, field.verbose_name)
+
+    # write name if field
+    for row, cortege in enumerate(query, 1):
+        for col, field in enumerate(fields):
+            ws.write(row, col, display(cortege, field.name))
+    wb.save(excelfile)
+    return excelfile
+
+
+def send_user_by_xml(user):
+    """
+    sand email and attach xml file
+    """
+    excelfile = create_xml(user_rates(user))
+    # send email
+    email = EmailMessage()
+    email.subject = 'Currency rates'
+    email.body = 'Last currency rates'
+    email.from_email = 'battlefieldblo@gmail.com'
+    email.to = [user.email]
+    email.attach('Currency_rates.xls', excelfile.getvalue(), 'application/ms-excel')
+    email.send()
+
+
+def send_xml_to_all():
+    for user in User.objects.all():
+        send_user_by_xml(user)
