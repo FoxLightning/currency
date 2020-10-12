@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from . import choices
 
@@ -8,7 +9,7 @@ class Rate(models.Model):
     source = models.PositiveSmallIntegerField(choices=choices.SOURCE_CHOICES, verbose_name='Bank')
     buy = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Buy')
     sale = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='Sale')
-    created = models.DateTimeField(auto_now=True, verbose_name='Update time')
+    created = models.DateTimeField(verbose_name='Update time', default=timezone.now())
 
     def __str__(self):
         # max recursion depth if i try to use get_source_display

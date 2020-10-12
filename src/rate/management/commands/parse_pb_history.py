@@ -1,3 +1,4 @@
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 
 from django.core.management.base import BaseCommand
@@ -6,27 +7,20 @@ from rate.models import Rate
 
 import requests
 
-from datetime import datetime, date, timedelta
-
-
-import pytz
 
 TWOPLACES = Decimal(10) ** -2
 
 
-def check_and_write_legacy(currency, source, sale, buy, date):
-    rate = Rate.objects.filter(source=source, currency=currency, created=date).last()
-    if not rate:
-        Rate.objects.create(
-            currency=currency,
-            source=source,
-            sale=sale,
-            buy=buy,
-            created=date,
-        )
+def rate_exist(date) -> bool:
+    rate1 = Rate.objects.filter(source=1, currency=1, created=date).last()
+    rate2 = Rate.objects.filter(source=1, currency=2, created=date).last()
+    return True if rate1 or rate2 else False
 
 
 def parse_privatbank_legacy(date):
+    # check before query up performance when rate is exist
+    if rate_exist(date):
+        return print('rate allready exist')  # noqa
     url = f'https://api.privatbank.ua/p24api/exchange_rates?json&date={date.strftime("%d.%m.%Y")}'
     response = requests.get(url)
     response.raise_for_status()
@@ -37,11 +31,21 @@ def parse_privatbank_legacy(date):
         'EUR': 2,
     }
 
-    for row in filter(lambda x: x['currency'] in currency_map.keys(), data["exchangeRate"][1:]):
-        buy, sale = (Decimal(row[i]).quantize(TWOPLACES) for i in ('purchaseRate', 'saleRate',))
+    for row in filter(lambda x: x.get('currency') in currency_map.keys(), data["exchangeRate"][1:]):
+        buy, sale = (row.get(i) for i in ('purchaseRate', 'saleRate',))
+        if not (buy or sale):
+            print('Rate not exist in source')  # noqa
+            continue
+        buy, sale = (Decimal(i).quantize(TWOPLACES) for i in (buy, sale))
         currency = currency_map[row['currency']]
-        print(source, currency, buy, sale, f'{date} 00:00')
-        check_and_write_legacy(currency, source, sale, buy, f'{date} 00:00:00')
+        # print(source, currency, buy, sale, f'{date} 00:00')
+        Rate.objects.create(
+            currency=currency,
+            source=source,
+            sale=sale,
+            buy=buy,
+            created=f'{date} 00:00:00',
+        )
 
 
 def period(start, end=None, step=1):
@@ -61,9 +65,14 @@ def period(start, end=None, step=1):
 
     delta_time = timedelta(days=step)
 
+    total_iterations = (end_date - start_date).days
+    complite = 1
     while start_date < end_date:
         parse_privatbank_legacy(start_date)
         start_date += delta_time
+        complite += 1
+        persent = round(complite/total_iterations*100, 2)
+        print(f'Operation {complite}/{total_iterations}, {persent}% done')  # noqa
 
 
 class Command(BaseCommand):
@@ -75,12 +84,12 @@ class Command(BaseCommand):
         parser.add_argument('-s', '--step', type=int, help='Step *d, default: 1 day')
 
     def handle(self, *args, **kwargs):
-        step = kwargs['step']
+        step = kwargs['step'] if kwargs['step'] else 1
         start = kwargs['begin']
         if not start:
             return 'Error: -b --begin must be not None'
         period(
             start,
             kwargs['end'],
-            step if step else 1,
+            step,
         )

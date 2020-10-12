@@ -12,7 +12,7 @@ from .forms import SubscriptionForm
 
 
 class RateListView(ListView):
-    queryset = Rate.objects.all().order_by('sale')
+    queryset = Rate.objects.all().order_by('id')
 
 
 class ContactUsListView(ListView):
@@ -101,7 +101,7 @@ class AddSubView(CreateView):
         return redirect('rate:sublist')
 
 
-def addsub(request): 
+def addsub(request):
     form = SubscriptionForm(request.POST or None)
     context = {'form': form}
     if request.POST:
@@ -120,4 +120,9 @@ def addsub(request):
         request,
         'rate/addsubscription_create.html',
         context=context
-        )
+    )
+
+
+def download(request):
+    context = None
+    return render(request, 'rate/*.html', context)
