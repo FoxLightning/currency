@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from time import sleep
 
 from django.core.management.base import BaseCommand
 
@@ -68,7 +69,12 @@ def period(start, end=None, step=1):
     total_iterations = (end_date - start_date).days
     complite = 1
     while start_date < end_date:
-        parse_privatbank_legacy(start_date)
+        # иногда выдает ошибку 503
+        try:
+            parse_privatbank_legacy(start_date)
+        except requests.exceptions.HTTPError:
+            sleep(10)
+            continue
         start_date += delta_time
         complite += 1
         persent = round(complite/total_iterations*100, 2)

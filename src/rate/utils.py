@@ -48,7 +48,7 @@ def create_xml(query):
     """
     Create xml from queryset, include all fields in models
     """
-    excelfile = BytesIO()
+    xmlfile = BytesIO()
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Rates')
 
@@ -61,8 +61,8 @@ def create_xml(query):
     for row, cortege in enumerate(query, 1):
         for col, field in enumerate(fields):
             ws.write(row, col, display(cortege, field.name))
-    wb.save(excelfile)
-    return excelfile
+    wb.save(xmlfile)
+    return xmlfile
 
 
 def send_user_by_xml(user):

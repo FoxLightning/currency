@@ -17,4 +17,7 @@ urlpatterns = [
     path('dellsub/<int:pk>', views.subdel, name='dellsub'),
     # path('addsubscription/', views.AddSubView.as_view(), name='addsubscription'),
     path('addsubscription/', views.addsub, name='addsubscription'),
+    path('latestrates/', views.LatestRates.as_view(), name='latestrates'),
+    path('downloadlatestrates/', views.DownloadLatestRates.as_view(), name='downloadlatestrates'),
+    path('downloadallrates/', views.DownloadAllRates.as_view(), name='downloadallrates'),
 ]

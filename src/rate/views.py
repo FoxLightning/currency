@@ -1,14 +1,13 @@
 from django.db.models import Avg
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, ListView, TemplateView, DeleteView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView, TemplateView, View
 
 from .forms import SubscriptionForm
-
 from .models import ContactUs, Feedback, Rate, Subscription
 from .tasks import send_email_async
-
-from .forms import SubscriptionForm
+from .utils import create_xml, last_rates
 
 
 class RateListView(ListView):
@@ -123,6 +122,23 @@ def addsub(request):
     )
 
 
-def download(request):
-    context = None
-    return render(request, 'rate/*.html', context)
+class LatestRates(View):
+    def get(self, request):
+        context = {'rate_list': last_rates()}
+        return render(request, 'rate/latest-rates.html', context=context)
+
+
+class DownloadLatestRates(View):
+    def get(self, request):
+        file = create_xml(last_rates())
+        response = HttpResponse(file.getvalue(), content_type='application/xml')
+        response['Content-Disposition'] = 'attachment; filename=rate_list.xml'
+        return response
+
+
+class DownloadAllRates(View):
+    def get(self, request):
+        file = create_xml(Rate.objects.all())
+        response = HttpResponse(file.getvalue(), content_type='application/xml')
+        response['Content-Disposition'] = 'attachment; filename=rate_list.xml'
+        return response
