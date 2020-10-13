@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div class='row'>
+    <div class='col'>
+      <a href="{% url 'rate:downloadallrates' %}">Download</a>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Currency</th>
+            <th scope="col">Source</th>
+            <th scope="col">Buy</th>
+            <th scope="col">Sale</th>
+            <th scope="col">Last update</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rate_list %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ row.get_currency_display }}</td>
+            <td>{{ row.get_source_display }}</td>
+            <td>{{ row.buy }}</td>
+            <td>{{ row.sale }}</td>
+            <td>{{ row.created }}</td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content%}

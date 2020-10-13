@@ -18,3 +18,7 @@ urlpatterns = [
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns.append(path('__debug__', include(debug_toolbar.urls)))
+
+
+handler404 = 'rate.views.handler404'
+handler500 = 'rate.views.handler500'
