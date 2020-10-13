@@ -24,17 +24,17 @@ PRAVEX = 10
 ALPHABANK = 11
 
 SOURCE_CHOICES = (
-    (1, 'PrivatBank'),
-    (2, 'MonoBank'),
-    (3, 'Vkurse'),
-    (4, 'Fixer'),
-    (5, 'Oschadbank'),
-    (6, 'Prostobank'),
-    (7, 'Minfin'),
-    (8, 'Ukrgazbank'),
-    (9, 'Pumb'),
-    (10, 'Pravex'),
-    (11, 'Alphabank'),
+    (PRIVATBANK, 'PrivatBank'),
+    (MONOBANK, 'MonoBank'),
+    (VKURSE, 'Vkurse'),
+    (FIXER, 'Fixer'),
+    (OSCHADBANK, 'Oschadbank'),
+    (PROSTOBANK, 'Prostobank'),
+    (MINFIN, 'Minfin'),
+    (PROSTOBANK, 'Ukrgazbank'),
+    (PUMB, 'Pumb'),
+    (PRAVEX, 'Pravex'),
+    (ALPHABANK, 'Alphabank'),
 )
 
 OPTIONS = (
