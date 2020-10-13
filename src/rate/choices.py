@@ -1,3 +1,8 @@
+from decimal import Decimal
+
+
+TWOPLACES = Decimal(10) ** -2
+
 CURRENCY_USD = 1
 CURRENCY_EUR = 2
 

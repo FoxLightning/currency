@@ -4,12 +4,12 @@ from time import sleep
 
 from django.core.management.base import BaseCommand
 
+from rate.choices import TWOPLACES
 from rate.models import Rate
 
 import requests
 
-
-TWOPLACES = Decimal(10) ** -2
+from tqdm import tqdm
 
 
 def rate_exist(date) -> bool:
@@ -21,7 +21,8 @@ def rate_exist(date) -> bool:
 def parse_privatbank_legacy(date):
     # check before query up performance when rate is exist
     if rate_exist(date):
-        return print('rate allready exist')  # noqa
+        # print('rate allready exist')  # noqa
+        return None
     url = f'https://api.privatbank.ua/p24api/exchange_rates?json&date={date.strftime("%d.%m.%Y")}'
     response = requests.get(url)
     response.raise_for_status()
@@ -35,7 +36,7 @@ def parse_privatbank_legacy(date):
     for row in filter(lambda x: x.get('currency') in currency_map.keys(), data["exchangeRate"][1:]):
         buy, sale = (row.get(i) for i in ('purchaseRate', 'saleRate',))
         if not (buy or sale):
-            print('Rate not exist in source')  # noqa
+            # print('Rate not exist in source')  # noqa
             continue
         buy, sale = (Decimal(i).quantize(TWOPLACES) for i in (buy, sale))
         currency = currency_map[row['currency']]
@@ -66,19 +67,18 @@ def period(start, end=None, step=1):
 
     delta_time = timedelta(days=step)
 
-    total_iterations = (end_date - start_date).days
-    complite = 1
-    while start_date < end_date:
-        # иногда выдает ошибку 503
-        try:
-            parse_privatbank_legacy(start_date)
-        except requests.exceptions.HTTPError:
-            sleep(10)
-            continue
+    total_iterations = (end_date - start_date).days//step
+
+    for i in tqdm(range(total_iterations)):
+        # Except 503
+        while True:
+            try:
+                parse_privatbank_legacy(start_date)
+                break
+            except requests.exceptions.HTTPError:
+                sleep(10)
+                continue
         start_date += delta_time
-        complite += 1
-        persent = round(complite/total_iterations*100, 2)
-        print(f'Operation {complite}/{total_iterations}, {persent}% done')  # noqa
 
 
 class Command(BaseCommand):

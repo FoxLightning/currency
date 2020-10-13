@@ -81,5 +81,5 @@ def send_user_by_xml(user):
 
 
 def send_xml_to_all():
-    for user in User.objects.all():
+    for user in User.objects.all().iterator():
         send_user_by_xml(user)

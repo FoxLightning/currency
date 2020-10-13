@@ -11,7 +11,7 @@ from .utils import create_xml, last_rates
 
 
 class RateListView(ListView):
-    queryset = Rate.objects.all().order_by('id')
+    queryset = Rate.objects.all().order_by('-id')
 
 
 class ContactUsListView(ListView):
@@ -41,13 +41,13 @@ class FeedbackView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        if self.request.user.id in (i.user_id_id for i in Feedback.objects.all()):
+        if Feedback.objects.filter(user_id=self.request.user.id).exists():
             return redirect('rate:error')
         else:
             Feedback.objects.create(
                 rating=form.cleaned_data['rating'],
-                user_id=self.request.user,
-                )
+                user_id=self.request.user.id,
+            )
             return redirect('rate:showrating')
 
 
@@ -91,12 +91,10 @@ class AddSubView(CreateView):
 
     def form_valid(self, form):
         bunks = form.cleaned_data['banks']
-        user = self.request.user
-        if bunks not in (i.banks for i in self.model.objects.filter(user=user)):
-            self.model.objects.create(
-                user=self.request.user,
-                banks=bunks,
-                )
+        self.model.objects.create(
+            user=self.request.user,
+            banks=bunks,
+            )
         return redirect('rate:sublist')
 
 

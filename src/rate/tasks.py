@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 from celery import shared_task
 
+from rate.choices import TWOPLACES
 from rate.utils import send_xml_to_all
 
 import requests
@@ -19,10 +20,6 @@ def send_email_async(subject, text):
         ['bogdanlisichenko@gmail.com'],
         fail_silently=False,
     )
-
-
-# Currency parsing
-TWOPLACES = Decimal(10) ** -2
 
 
 def check_and_write(currency, source, sale, buy):
