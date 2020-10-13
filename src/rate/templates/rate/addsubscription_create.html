@@ -3,12 +3,14 @@
 {% block content %}
   <div class="row">
     <div class="col">
-      <form action="{% url 'rate:feedback' %}" method='POST'>
+      <br><br><br>
+      <form method="POST"> 
         {% csrf_token %} 
-        <br>
-        <br>
-        <h1>AVG rating: {{ rating }} (10)</h1>
-      </form>
+        {{ form.as_p }} 
+        <input type="submit" value="Submit"> 
+      </form> 
     </div>
   </div>
 {% endblock content %}
+
+

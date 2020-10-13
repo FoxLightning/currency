@@ -1,1 +1,1 @@
-DELETE FROM rate_feedback
+SELECT * FROM rate_rate ORDER BY id

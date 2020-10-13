@@ -3,7 +3,8 @@
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
     "files.exclude": {
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        "**/.venv": true,
     },
     "sqltools.connections": [
         {

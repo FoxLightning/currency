@@ -11,6 +11,8 @@ urlpatterns = [
 
     path('rate/', include('rate.urls')),
 
+    path('accounts/', include('allauth.urls'))
+
 ]
 
 if settings.DEBUG:
