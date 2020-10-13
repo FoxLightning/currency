@@ -1,28 +1,43 @@
 from django.db import models
 
+from . import choices
+
 
 class Rate(models.Model):
-    CURRENCY_CHOICES = (
-        (1, 'USD'),
-        (2, 'UER'),
-    )
-
-    SOURCE_CHOICES = (
-        (1, 'PrivatBank'),
-        (2, 'MonoBank'),
-        (3, 'Vkurse'),
-        (4, 'fixer'),
-        (5, 'oschadbank'),
-        (6, 'prostobank'),
-        (7, 'minfin'),
-        (8, 'ukrgazbank'),
-        (9, 'pumb'),
-        (10, 'pravex'),
-        (11, 'alphabank'),
-    )
-
-    currency = models.PositiveSmallIntegerField(choices=CURRENCY_CHOICES)
-    source = models.PositiveSmallIntegerField(choices=SOURCE_CHOICES)
+    currency = models.PositiveSmallIntegerField(choices=choices.CURRENCY_CHOICES)
+    source = models.PositiveSmallIntegerField(choices=choices.SOURCE_CHOICES)
     buy = models.DecimalField(max_digits=6, decimal_places=2)
     sale = models.DecimalField(max_digits=6, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        # max recursion depth if i try to use get_source_display
+        return f"{self.source} {self.currency}"
+
+    class Meta:
+        verbose_name = "Rate"
+        verbose_name_plural = "Rates"
+
+
+class ContactUs(models.Model):
+    email = models.EmailField()
+    subject = models.CharField(max_length=128)
+    massage = models.TextField()
+
+    def __str__(self):
+        return self.subject
+
+    class Meta:
+        verbose_name = "Massage"
+        verbose_name_plural = "Massages"
+
+
+class Feedback(models.Model):
+    rating = models.PositiveSmallIntegerField(choices=choices.OPTIONS)
+
+    def __str__(self):
+        return self.rating
+
+    class Meta:
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedbacks"

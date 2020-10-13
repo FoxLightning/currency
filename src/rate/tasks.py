@@ -8,6 +8,19 @@ from celery import shared_task
 import requests
 
 
+@shared_task
+def send_email_async(subject, text):
+    from django.core.mail import send_mail
+    send_mail(
+        subject,
+        text,
+        'battlefieldblo@gmail.com',
+        ['bogdanlisichenko@gmail.com'],
+        fail_silently=False,
+    )
+
+
+# Currency parsing
 TWOPLACES = Decimal(10) ** -2
 
 
@@ -51,9 +64,9 @@ def parse_monobank():
 
     source = 2  # 2 = MonoBank
     allow_currency = {
-        840: 1,  # 840 = dollar id
-        978: 2,  # 978 = euro id
-    }            # 980 = hrivna id
+        840: 1,
+        978: 2,
+    }
 
     for dct in filter(lambda x: x['currencyCodeA'] in allow_currency and x['currencyCodeB'] == 980, data):
         buy, sale = (Decimal(dct[i]).quantize(TWOPLACES) for i in ('rateBuy', 'rateSell'))
@@ -68,7 +81,7 @@ def parse_vkurse():
     response.raise_for_status()
     data = response.json()
 
-    source = 3  # 3 = vkurse.dp.ua
+    source = 3
     currency_map = {
         'Dollar': 1,
         'Euro': 2,
@@ -87,7 +100,7 @@ def parse_fixer():
     response.raise_for_status()
     data = response.json()['rates']
 
-    source = 4  # 4 = fixer
+    source = 4
     currency_map = {
         'USD': 1,
         'EUR': 2,
@@ -130,10 +143,10 @@ def parse_prostobank():
     rows = soup.find_all('p')
     array = [i.text for i in rows]
 
-    def r(x):
+    def conver_to_decimal(x):
         return Decimal(x.replace(' ', '').replace(',', '.')).quantize(TWOPLACES)
-
-    usd_buy, usd_sele, eur_buy, eur_sele = (r(array[i]) for i in (18, 19, 25, 26))
+    # 18, 19, 25, 26 elements in bsoup list
+    usd_buy, usd_sele, eur_buy, eur_sele = (conver_to_decimal(array[i]) for i in (18, 19, 25, 26))
 
     source = 6
 

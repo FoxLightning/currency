@@ -1,0 +1,17 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "files.exclude": {
+        "**/__pycache__": true
+    },
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Currency_DB",
+            "database": "${workspaceFolder:currency}/src/db.sqlite3"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
+}

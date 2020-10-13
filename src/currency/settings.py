@@ -2,6 +2,16 @@ import os
 
 from celery.schedules import crontab
 
+# EMAIL SETTINGS
+EMAIL_HOST_USER = 'battlefieldblo@gmail.com'
+EMAIL_HOST_PASSWORD = '7494496asdfAA1'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,6 +30,10 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'debug_toolbar',
     'django_extensions',
 
     'rate',
@@ -41,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'currency.urls'
@@ -48,7 +64,9 @@ ROOT_URLCONF = 'currency.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,9 +128,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
+# Celery
 CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_BEAT_SCHEDULE = {
     'parse1': {
@@ -129,7 +150,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'parse4': {
         'task': 'rate.tasks.parse_fixer',
-        'schedule': crontab(minute='*/1'),  # free version hes a limit of 1000 request per manth
+        'schedule': crontab(minute='*/45'),  # free version hes a limit of 1000 request per manth
     },
     'parse5': {
         'task': 'rate.tasks.parse_oschadbank',
@@ -145,7 +166,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'parse8': {
         'task': 'rate.tasks.parse_ukrgasbank',
-        'schedule': crontab(minute='*/1'),  # free version hes a limit of 1000 request per manth
+        'schedule': crontab(minute='*/1'),
     },
     'parse9': {
         'task': 'rate.tasks.parse_pumb',

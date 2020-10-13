@@ -1,3 +1,8 @@
-from django.contrib import admin  # noqa
+from django.contrib import admin
 
-# Register your models here.
+from .models import ContactUs, Feedback, Rate
+
+
+admin.site.register(Rate)
+admin.site.register(ContactUs)
+admin.site.register(Feedback)
