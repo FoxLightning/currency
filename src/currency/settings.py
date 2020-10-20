@@ -53,19 +53,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
+    # extensions
     'debug_toolbar',
     'django_extensions',
+    'crispy_forms',
 
+    # extension registration
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',
 
+    # apps
+    'account',
     'rate',
 ]
 
 LOGIN_REDIRECT_URL = '/'
 
+# for extension authentification
 # AUTHENTICATION_BACKENDS = (
 #     'django.contrib.auth.backends.ModelBackend',
 #     'allauth.account.auth_backends.AuthenticationBackend',
@@ -103,7 +108,7 @@ TEMPLATES = [
     },
 ]
 
-
+# for extension authentification
 # Provider specific settings
 # SOCIALACCOUNT_PROVIDERS = {
 #     'google': {
@@ -168,6 +173,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+AUTH_USER_MODEL = 'account.User'
+
+# django-crispy-forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 # Celery
 CELERY_BROKER_URL = 'amqp://localhost'

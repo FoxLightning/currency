@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
 
 {% block content %}
   <div class="row">
     <div class="col">
       <br><br><br>
-      <form action="{% url 'rate:subscription' %}" method='POST' class="bootstrap4">
+      <form action="" method='POST'>
         {% csrf_token %} 
-        {{ form|crispy}}
-
+        {{ form.as_p}}
         <button type="submit" class="btn btn-primary">Primary</button>
       </form>
     </div>

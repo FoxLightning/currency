@@ -1,20 +1,16 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <div class="row">
     <div class="col">
-      <form action="{% url 'rate:contactuscreate' %}" method='POST'>
+      <form action="{% url 'rate:contactuscreate' %}" method='POST' class="bootstrap4">
         <div class="form-group">
           <br>
           {% csrf_token %}
-          Email: <br>
-          {{ form.email }} <br>
-          Subject: <br>
-          {{ form.subject}} <br>
-          Massage: <br>
-          {{ form.massage}} <br>
+          {{ form|crispy }}
         </div>
-        <button type="submit" class="btn btn-primary">Primary</button>
+        <button type="submit" class="btn btn-primary">Send</button>
       </form>
     </div>
   </div>
