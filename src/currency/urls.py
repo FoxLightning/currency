@@ -11,7 +11,7 @@ urlpatterns = [
 
     path('rate/', include('rate.urls')),
 
-    path('accounts/', include('allauth.urls'))
+    # path('accounts/', include('allauth.urls'))
 
 ]
 

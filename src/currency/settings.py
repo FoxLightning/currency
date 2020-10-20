@@ -56,19 +56,20 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'django_extensions',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
 
     'rate',
 ]
 
 LOGIN_REDIRECT_URL = '/'
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# )
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -104,15 +105,15 @@ TEMPLATES = [
 
 
 # Provider specific settings
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': '654'
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP': {
+#             'client_id': '123',
+#             'secret': '456',
+#             'key': '654'
+#         }
+#     }
+# }
 
 WSGI_APPLICATION = 'currency.wsgi.application'
 
