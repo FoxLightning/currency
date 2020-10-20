@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
   <div class="row">
     <div class="col">
+    </div>
+    <div class="col">
       <br><br><br>
-      <form action="{% url 'rate:feedback' %}" method='POST'>
+      <form action="{% url 'rate:feedback' %}" method='POST' class="bootstrap4">
         {% csrf_token %} 
-        {{ form.as_p}}
-        <button type="submit" class="btn btn-primary">Primary</button>
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Ok</button>
       </form>
+    </div>
+    <div class="col">
     </div>
   </div>
 {% endblock content %}

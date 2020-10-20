@@ -35,7 +35,7 @@ class ContactUs(models.Model):
 
 class Feedback(models.Model):
     rating = models.PositiveSmallIntegerField(choices=choices.OPTIONS)
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    user = models.OneToOneField('account.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.rating)
@@ -47,4 +47,4 @@ class Feedback(models.Model):
 
 class Subscription(models.Model):
     banks = models.PositiveSmallIntegerField(choices=choices.SOURCE_CHOICES)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('account.User', on_delete=models.CASCADE)
