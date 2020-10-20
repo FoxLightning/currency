@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+        Что я тут сделал не так не загружаеться из статик
+        <img src="{% static 'images/404.gif' %}" alt="404">
+        
+        <a href="{% url 'index' %}"> 
+            <img 
+                src="https://cdn.dribbble.com/users/2272148/screenshots/6633933/daily008.gif" 
+                alt="404"> 
+        </a>
+    </div>
+  </div>
+{% endblock content %}

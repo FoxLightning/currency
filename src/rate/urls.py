@@ -20,4 +20,6 @@ urlpatterns = [
     path('latestrates/', views.LatestRates.as_view(), name='latestrates'),
     path('downloadlatestrates/', views.DownloadLatestRates.as_view(), name='downloadlatestrates'),
     path('downloadallrates/', views.DownloadAllRates.as_view(), name='downloadallrates'),
+
+    path('hw14/', views.hw14.as_view(), name='hw14'),
 ]

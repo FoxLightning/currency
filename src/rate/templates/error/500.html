@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col">
+        <img src="{% static 'images/500.jpg' %}" alt="500">
+
+        <a href="{% url 'index' %}"> 
+            <img 
+                src="https://2.bp.blogspot.com/_xgEWICjIuNM/TRBbYERDeiI/AAAAAAAAAJw/k_ay9PvOvs8/s1600/internal-server-error.jpg" 
+                alt="500"> 
+        </a>
+    </div>
+  </div>
+{% endblock content %}

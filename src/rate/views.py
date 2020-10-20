@@ -1,11 +1,12 @@
 from django.db.models import Avg
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, render_to_response
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, View
 
 from .forms import SubscriptionForm
 from .models import ContactUs, Feedback, Rate, Subscription
+from .selectors import get_latest_rates
 from .tasks import send_email_async
 from .utils import create_xml, last_rates
 
@@ -140,3 +141,24 @@ class DownloadAllRates(View):
         response = HttpResponse(file.getvalue(), content_type='application/xml')
         response['Content-Disposition'] = 'attachment; filename=rate_list.xml'
         return response
+
+
+class hw14(View):
+    def get(self, request):
+        latest_rates = get_latest_rates()
+        context = {
+            'rate_list': latest_rates
+        }
+        return render(request, 'rate/hw14.html', context=context)
+
+
+def handler404(request, exception):
+    response = render_to_response('error/404.html', {})
+    response.status_code = 404
+    return response
+
+
+def handler500(request):
+    response = render_to_response('/error/500.html', {})
+    response.status_code = 500
+    return render(response, 'rate/500.html', locals())
