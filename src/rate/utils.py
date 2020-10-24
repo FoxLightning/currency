@@ -1,6 +1,7 @@
 from io import BytesIO
 
-from django.contrib.auth.models import User
+from account.models import User
+
 from django.core.mail import EmailMessage
 
 from rate.models import Rate, Subscription
