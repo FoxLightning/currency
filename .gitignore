@@ -1,5 +1,5 @@
 .venv
 DB.session.sql
 passwords.py
-
+static_content/
 *__pycache__/

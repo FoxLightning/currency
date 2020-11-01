@@ -40,7 +40,6 @@ def parse_privatbank():
     response = requests.get(url)
     response.raise_for_status()
     data = response.json()
-
     source = 1  # 1 = PrivatBank
     currency_map = {
         'USD': 1,
@@ -91,23 +90,23 @@ def parse_vkurse():
         check_and_write(currency, source, sale, buy)
 
 
-@shared_task
-def parse_fixer():
-    url = 'http://data.fixer.io/api/latest?access_key=9373480f27e621ad817348c5dff35ed3'
-    response = requests.get(url)
-    response.raise_for_status()
-    data = response.json()['rates']
+# @shared_task
+# def parse_fixer():
+#     url = 'http://data.fixer.io/api/latest?access_key=9373480f27e621ad817348c5dff35ed3'
+#     response = requests.get(url)
+#     response.raise_for_status()
+#     data = response.json()['rates']
 
-    source = 4
-    currency_map = {
-        'USD': 1,
-        'EUR': 2,
-    }
-    UAH = Decimal(data['UAH']).quantize(TWOPLACES)  # EUR -> UAH
+#     source = 4
+#     currency_map = {
+#         'USD': 1,
+#         'EUR': 2,
+#     }
+#     UAH = Decimal(data['UAH']).quantize(TWOPLACES)  # EUR -> UAH
 
-    for key, currency in currency_map.items():
-        nominal = UAH/Decimal(data[key]).quantize(TWOPLACES)
-        check_and_write(currency, source, nominal, nominal)
+#     for key, currency in currency_map.items():
+#         nominal = UAH/Decimal(data[key]).quantize(TWOPLACES)
+#         check_and_write(currency, source, nominal, nominal)
 
 
 @shared_task
@@ -115,7 +114,6 @@ def parse_oschadbank():
     url = 'https://www.oschadbank.ua/ua/private/currency'
     response = requests.get(url)
     response.raise_for_status()
-
     soup = BeautifulSoup(response.text, 'html.parser')
 
     rows = soup.find_all('td', attrs={'class': 'text-right'})
@@ -152,16 +150,16 @@ def parse_prostobank():
     check_and_write(2, source, eur_buy, eur_sele)
 
 
-@shared_task
-def parse_minfin():
-    source = 7
-    for num, var in enumerate(('usd', 'eur',), start=1):
-        html = requests.get(f'https://minfin.com.ua/currency/banks/{var}')
-        soup = BeautifulSoup(html.text, 'html.parser')
-        rows = soup.find('td', {'class': 'mfm-text-nowrap', 'data-title': 'Средний курс'})
+# @shared_task
+# def parse_minfin():
+#     source = 7
+#     for num, var in enumerate(('usd', 'eur',), start=1):
+#         html = requests.get(f'https://minfin.com.ua/currency/banks/{var}')
+#         soup = BeautifulSoup(html.text, 'html.parser')
+#         rows = soup.find('td', {'class': 'mfm-text-nowrap', 'data-title': 'Средний курс'})
 
-        buy, sale = (Decimal(str(i.string).replace('\n', '')).quantize(TWOPLACES) for i in list(rows)[::2])
-        check_and_write(num, source, buy, sale)
+#         buy, sale = (Decimal(str(i.string).replace('\n', '')).quantize(TWOPLACES) for i in list(rows)[::2])
+#         check_and_write(num, source, buy, sale)
 
 
 @shared_task
@@ -217,7 +215,7 @@ def parse_alpha():
     soup = BeautifulSoup(html_doc.text, 'html.parser')
 
     rows = soup.find_all('span', {'class': 'rate-number'})
-    usd_buy, usd_sale, eur_buy, eur_sale = [float(i.text) for i in rows][:4]
+    usd_buy, usd_sale, eur_buy, eur_sale = [Decimal(i.text).quantize(TWOPLACES) for i in rows][:4]
 
     check_and_write(1, source, usd_buy, usd_sale)
     check_and_write(2, source, eur_buy, eur_sale)

@@ -22,7 +22,6 @@ def last_rates() -> list:
     """
     Return all last rates of all banks and currency
     """
-    # Это легально вообще?
     query = Rate.objects.raw(
         """
         SELECT id, source, currency, buy, sale, MAX(created)
@@ -30,8 +29,6 @@ def last_rates() -> list:
         GROUP BY source, currency
         """
     )
-    # Как добавить поля, возвращает только currency, source и created
-    # a = Rate.objects.values('currency', 'source').annotate(created=Max('created'))
     return list(query)
 
 
@@ -84,3 +81,4 @@ def send_user_by_xml(user):
 def send_xml_to_all():
     for user in User.objects.all().iterator():
         send_user_by_xml(user)
+

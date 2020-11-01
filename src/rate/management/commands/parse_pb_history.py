@@ -1,3 +1,4 @@
+import sys
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from time import sleep
@@ -21,7 +22,7 @@ def rate_exist(date) -> bool:
 def parse_privatbank_legacy(date):
     # check before query up performance when rate is exist
     if rate_exist(date):
-        # print('rate allready exist')  # noqa
+        sys.stdout.write('rate allready exist')
         return None
     url = f'https://api.privatbank.ua/p24api/exchange_rates?json&date={date.strftime("%d.%m.%Y")}'
     response = requests.get(url)
@@ -36,11 +37,11 @@ def parse_privatbank_legacy(date):
     for row in filter(lambda x: x.get('currency') in currency_map.keys(), data["exchangeRate"][1:]):
         buy, sale = (row.get(i) for i in ('purchaseRate', 'saleRate',))
         if not (buy or sale):
-            # print('Rate not exist in source')  # noqa
+            sys.stdout.write('Rate not exist in source')
             continue
         buy, sale = (Decimal(i).quantize(TWOPLACES) for i in (buy, sale))
         currency = currency_map[row['currency']]
-        # print(source, currency, buy, sale, f'{date} 00:00')
+        # sys.stdout.write(source, currency, buy, sale, f'{date} 00:00')
         Rate.objects.create(
             currency=currency,
             source=source,

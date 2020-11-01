@@ -7,7 +7,6 @@ from django.views.generic import CreateView, DeleteView, ListView, TemplateView,
 
 from .forms import SubscriptionForm
 from .models import ContactUs, Feedback, Rate, Subscription
-from .selectors import get_latest_rates
 from .tasks import send_email_async
 from .utils import create_xml, last_rates
 
@@ -144,15 +143,6 @@ class DownloadAllRates(View):
         response = HttpResponse(file.getvalue(), content_type='application/xml')
         response['Content-Disposition'] = 'attachment; filename=rate_list.xml'
         return response
-
-
-class hw14(View):
-    def get(self, request):
-        latest_rates = get_latest_rates()
-        context = {
-            'rate_list': latest_rates
-        }
-        return render(request, 'rate/hw14.html', context=context)
 
 
 class DeleteRate(DeleteView):

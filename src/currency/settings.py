@@ -34,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'c+34d(_=o-^q!8u(+1glra2b)re*9v6rys85#8trgt$w28akui'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True 
 
 ALLOWED_HOSTS = ['*']
 
@@ -197,10 +197,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'rate.tasks.parse_vkurse',
         'schedule': crontab(minute='*/1'),
     },
-    'parse4': {
-        'task': 'rate.tasks.parse_fixer',
-        'schedule': crontab(minute='*/45'),  # free version hes a limit of 1000 request per manth
-    },
+    # 'parse4': {
+    #     'task': 'rate.tasks.parse_fixer',
+    #     'schedule': crontab(minute='*/45'),  # free version hes a limit of 1000 request per manth
+    # },
     'parse5': {
         'task': 'rate.tasks.parse_oschadbank',
         'schedule': crontab(minute='*/1'),
