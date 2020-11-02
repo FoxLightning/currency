@@ -27,14 +27,8 @@ class CreateContactUsView(CreateView):
     def form_valid(self, form):
         if form.is_valid():
             data = form.cleaned_data
-            send_email_async(data['subject'], f"sander:{data['email']}\n{data['massage']}")
+            send_email_async.delay(data['subject'], f"sander:{data['email']}\n{data['massage']}")
         return super().form_valid(form)
-
-    # def form_valid(self, form):
-    #     if form.is_valid():
-    #         data = form.cleaned_data
-    #         send_email_async.delay(data['subject'], f"sander:{data['email']}\n{data['massage']}")
-    #     return super().form_valid(form)
 
 
 class FeedbackView(CreateView):

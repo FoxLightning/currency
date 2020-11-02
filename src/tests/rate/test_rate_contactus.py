@@ -61,14 +61,3 @@ def test_rate_contactuscreate_post_ok(client, mailoutbox):
     assert list(m.to) == ['bogdanlisichenko@gmail.com']
     assert response.status_code == 302
     assert ContactUs.objects.count() - start == 1
-
-# from django.core import mail
-
-# def test_mail(mailoutbox):
-#     mail.send_mail('subject', 'body', 'from@example.com', ['to@example.com'])
-#     assert len(mailoutbox) == 1
-#     m = mailoutbox[0]
-#     assert m.subject == 'subject'
-#     assert m.body == 'body'
-#     assert m.from_email == 'from@example.com'
-#     assert list(m.to) == ['to@example.com']

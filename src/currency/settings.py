@@ -2,6 +2,8 @@ import os
 
 from celery.schedules import crontab
 
+# for rabitmq in pytest
+CELERY_TASK_ALWAYS_EAGER = True
 
 CACHES = {
     'default': {

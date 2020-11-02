@@ -89,7 +89,7 @@ def parse_vkurse():
         buy, sale = (Decimal(dct[i]).quantize(TWOPLACES) for i in ('buy', 'sale'))
         check_and_write(currency, source, sale, buy)
 
-
+# not a bank
 # @shared_task
 # def parse_fixer():
 #     url = 'http://data.fixer.io/api/latest?access_key=9373480f27e621ad817348c5dff35ed3'
@@ -149,7 +149,7 @@ def parse_prostobank():
     check_and_write(1, source, usd_buy, usd_sele)
     check_and_write(2, source, eur_buy, eur_sele)
 
-
+# not a bank
 # @shared_task
 # def parse_minfin():
 #     source = 7

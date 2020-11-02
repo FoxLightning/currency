@@ -31,8 +31,8 @@ func_data_html = [
 def test_banks_json_2(func, data, mocker):
     count_rates = Rate.objects.count()
     json_file = open(os.path.join(*external_data, data))
-
-    currencies = json.load(json_file)
+    with open(os.path.join(*external_data, data)) as json_file:
+        currencies = json.load(json_file)
     requests_get_patcher = mocker.patch('requests.get')
     requests_get_patcher.return_value = MagicMock(
         status_code=200,
@@ -46,8 +46,8 @@ def test_banks_json_2(func, data, mocker):
 @pytest.mark.parametrize("func,data", func_data_html)
 def test_banks_html(func, data, mocker):
     count_rates = Rate.objects.count()
-    html_file = open(os.path.join(*external_data, data))
-    txt_file = '\n'.join(html_file.readlines())
+    with open(os.path.join(*external_data, data)) as html_file:
+        txt_file = '\n'.join(html_file.readlines())
     requests_get_patcher = mocker.patch('requests.get')
     requests_get_patcher.return_value = MagicMock(
         status_code=200,
