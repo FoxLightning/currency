@@ -1,0 +1,21 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+# coverege to skip
+omit = src/manage.py,
+       */migrations/*,
+       */tests/*,
+       */wsgi.py,
+       */__init__.py,
+       */tests.py,
+       */apps.py,
+
+
+# accuracy of percent ratio 
+[report]
+precision = 4
+
+# place where save report html file
+[html]
+directory = static_content/media/coverage
