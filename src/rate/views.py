@@ -2,11 +2,11 @@ from django.db.models import Avg
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, render_to_response
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView, View
+from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView, View
+
 
 from .forms import SubscriptionForm
 from .models import ContactUs, Feedback, Rate, Subscription
-from .selectors import get_latest_rates
 from .tasks import send_email_async
 from .utils import create_xml, last_rates
 
@@ -79,6 +79,7 @@ class SubListView(ListView):
         return queryset
 
 
+# TODO rework
 def subdel(request, pk):
     Subscription.objects.filter(id=pk, user=request.user).delete()
     return redirect('rate:sublist')
@@ -99,6 +100,7 @@ class AddSubView(CreateView):
         return redirect('rate:sublist')
 
 
+# TODO rework
 def addsub(request):
     form = SubscriptionForm(request.POST or None)
     context = {'form': form}
@@ -143,13 +145,23 @@ class DownloadAllRates(View):
         return response
 
 
-class hw14(View):
-    def get(self, request):
-        latest_rates = get_latest_rates()
-        context = {
-            'rate_list': latest_rates
-        }
-        return render(request, 'rate/hw14.html', context=context)
+class DeleteRate(DeleteView):
+    queryset = Rate.objects.all()
+    success_url = reverse_lazy('rate:list')
+
+    def delete(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return super().delete(self, request, *args, **kwargs)
+
+
+class UpdateRate(UpdateView):
+    model = Rate
+    success_url = reverse_lazy('rate:list')
+    fields = ['currency', 'source', 'buy', 'sale', 'created']
+
+    def form_valid(self, form):
+        if self.request.user.is_superuser:
+            return super().form_valid(form)
 
 
 def handler404(request, exception):

@@ -3,7 +3,7 @@
 {% block content%}
   <div class='row'>
     <div class='col'>
-      <a href="{% url 'rate:downloadallrates' %}">Download</a>
+      <a href="{% url 'rate:downloadallrates' %}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Download</a>
       <table class="table">
         <thead>
           <tr>
@@ -13,6 +13,12 @@
             <th scope="col">Buy</th>
             <th scope="col">Sale</th>
             <th scope="col">Last update</th>
+            {% if user.is_superuser %}
+              <th scope="col">
+                <a href="" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">+</a>
+                <a href="" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">&#128190;</a>
+              </th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
@@ -24,6 +30,13 @@
             <td>{{ row.buy }}</td>
             <td>{{ row.sale }}</td>
             <td>{{ row.created }}</td>
+            {% if user.is_superuser %}
+
+              <th>
+                <a href="{% url 'rate:updaterate' row.id %}" class="btn btn-warning btn-sm active" role="button" aria-pressed="true">✏</a>
+                <a href="{% url 'rate:deleterate' row.id %}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">🗑</a>
+              </th>
+            {% endif %}
 
           </tr>
           {% endfor %}

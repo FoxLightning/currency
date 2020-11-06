@@ -2,7 +2,5 @@
 DB.session.sql
 passwords.py
 static_content/
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
 .pytest_cache/
+*__pycache__/

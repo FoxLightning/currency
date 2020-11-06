@@ -12,14 +12,14 @@ urlpatterns = [
     path('contactus/create', views.CreateContactUsView.as_view(), name='contactuscreate'),
     path('feedback/', views.FeedbackView.as_view(), name='feedback'),
     path('showrating/', views.FeedbackShowView.as_view(), name='showrating'),
-    path('error/', TemplateView.as_view(template_name='rate/error.html'), name='error'),
+    path('error/', TemplateView.as_view(template_name='error/error_voted.html'), name='error'),
     path('sublist/', views.SubListView.as_view(), name='sublist'),
     path('dellsub/<int:pk>', views.subdel, name='dellsub'),
-    # path('addsubscription/', views.AddSubView.as_view(), name='addsubscription'),
     path('addsubscription/', views.addsub, name='addsubscription'),
     path('latestrates/', views.LatestRates.as_view(), name='latestrates'),
     path('downloadlatestrates/', views.DownloadLatestRates.as_view(), name='downloadlatestrates'),
     path('downloadallrates/', views.DownloadAllRates.as_view(), name='downloadallrates'),
+    path('deleterate/<pk>', views.DeleteRate.as_view(), name='deleterate'),
+    path('updaterate/<pk>', views.UpdateRate.as_view(), name='updaterate'),
 
-    path('hw14/', views.hw14.as_view(), name='hw14'),
 ]

@@ -10,7 +10,7 @@
         {
             "previewLimit": 50,
             "driver": "SQLite",
-            "name": "Currency_DB",
+            "name": "CurrencyDB",
             "database": "${workspaceFolder:currency}/src/db.sqlite3"
         }
     ],
