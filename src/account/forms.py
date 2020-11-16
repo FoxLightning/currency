@@ -1,7 +1,18 @@
-from django import forms
-
 from account.models import User
 from account.tasks import send_sign_up_email
+
+from django import forms
+
+
+class UserLoginForm(forms.ModelForm):
+    model = User
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'password',
+        )
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -42,3 +53,14 @@ class UserRegistrationForm(forms.ModelForm):
         # send_sign_up_email.delay(instance.id)
         send_sign_up_email.apply_async(args=[instance.id], countdown=5)
         return instance
+
+
+class UserUpdatePassword(forms.Form):
+    password1 = forms.CharField(widget=forms.PasswordInput())
+    password2 = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        fields = (
+            'password1',
+            'password2',
+        )

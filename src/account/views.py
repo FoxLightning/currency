@@ -1,10 +1,13 @@
+import os
+
+from account.forms import UserRegistrationForm
+from account.models import User
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, View
-from account.models import User
-from account.forms import UserRegistrationForm
-from django.shortcuts import get_object_or_404, redirect
-import os
 
 
 class MyProfile(LoginRequiredMixin, UpdateView):
@@ -15,12 +18,14 @@ class MyProfile(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class SignOut(View):
-    pass
+class SignOut(LogoutView):
+    success_url = reverse_lazy('index')
+    template_name = os.path.join('account', 'user_sign_out.html')
 
 
-class SignIn(View):
-    pass
+class SignIn(LoginView):
+    success_url = reverse_lazy('index')
+    template_name = os.path.join('account', 'user_sign_in.html')
 
 
 class SignUp(CreateView):
@@ -39,3 +44,12 @@ class ActivateUser(View):
             user.is_active = True
             user.save(update_fields=('is_active', ))
         return redirect('index')
+
+
+class UserPasswordChange(PasswordChangeView):
+    template_name = os.path.join('account', 'user_password_change.html')
+    success_url = reverse_lazy('account:password_change_done')
+
+
+class UserPasswordChangeDone(PasswordChangeDoneView):
+    template_name = os.path.join('account', 'user_password_changed.html')
