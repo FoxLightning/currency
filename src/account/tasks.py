@@ -1,0 +1,23 @@
+from django.core.mail import send_mail
+from django.conf import settings
+
+from celery import shared_task
+from django.urls import reverse
+
+
+@shared_task
+def send_sign_up_email(user_id: int):
+    from account.models import User
+    user = User.objects.get(id=user_id)
+    url = settings.DOMAIN + reverse('account:activate', args=(user.username, ))
+    body = f'''
+        Url: {url}
+    '''
+
+    send_mail(
+        'Sign Up',
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email],
+        fail_silently=False,
+    )

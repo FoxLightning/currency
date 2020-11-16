@@ -2,8 +2,6 @@ import os
 
 from celery.schedules import crontab
 
-# for rabitmq in pytest
-CELERY_TASK_ALWAYS_EAGER = True
 
 CACHES = {
     'default': {
@@ -236,3 +234,12 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/1')
     }
 }
+
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'example@ex.com'
+    DOMAIN = 'http://localhost:8000'
+else:
+    # for rabitmq in pytest
+    CELERY_TASK_ALWAYS_EAGER = True
