@@ -55,12 +55,31 @@ class UserRegistrationForm(forms.ModelForm):
         return instance
 
 
-class UserUpdatePassword(forms.Form):
+class UserPassChenge(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
+        model = User
         fields = (
+            'password',
             'password1',
             'password2',
         )
+
+    def clean(self):
+        cleaned_data: dict = super().clean()
+        # check old password
+        if not self.instance.check_password(cleaned_data['password']):
+            self.add_error('password', 'Incorect current password.')
+        # check new password
+        if not self.errors:
+            if cleaned_data['password1'] != cleaned_data['password2']:
+                self.add_error('password1', 'Passwords do not match.')
+        return cleaned_data
+
+    def save(self):
+        self.instance.set_password(self.cleaned_data['password1'])
+        self.instance.save()
+        return self.instance
