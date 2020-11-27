@@ -1,7 +1,7 @@
-from django import forms
-
 from account.models import User
 from account.tasks import send_sign_up_email
+
+from django import forms
 
 
 class UserRegistrationForm(forms.ModelForm):

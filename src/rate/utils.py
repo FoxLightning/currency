@@ -26,7 +26,7 @@ def last_rates() -> list:
         """
         SELECT id, source, currency, buy, sale, MAX(created)
         FROM rate_rate
-        GROUP BY source, currency
+        GROUP BY source, currency, id
         """
     )
     return list(query)

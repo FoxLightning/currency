@@ -12,6 +12,16 @@
             "driver": "SQLite",
             "name": "CurrencyDB",
             "database": "${workspaceFolder:currency}/src/db.sqlite3"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "DB_PG",
+            "username": "currency",
+            "password": "jsdo47d2YRTw24Asdf",
+            "database": "currency"
         }
     ],
     "sqltools.useNodeRuntime": true,
