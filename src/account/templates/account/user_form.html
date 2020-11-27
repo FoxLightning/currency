@@ -4,6 +4,7 @@
   <div class="row">
     <div class="col">
       <br><br><br>
+      <a href="{% url 'account:password_change' pk=user.id %}">Chenge password</a>
       <form action="" method='POST'>
         {% csrf_token %} 
         {{ form.as_p}}
