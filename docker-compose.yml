@@ -1,12 +1,16 @@
 version: "3.8"
 
+x-defaults: &x-defaults
+  tty: true
+  stdin_open: true
+  restart: always
+  env_file: .env
+
 services:
 
   nginx:
     image: nginx:stable
     container_name: nginx
-    restart: always
-    env_file: .env_file
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./proxy_params:/etc/nginx/proxy_params:ro
@@ -15,81 +19,62 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    <<: *x-defaults
 
   backend:
     build: .
     container_name: backend
-    tty: true
-    stdin_open: true
-    restart: always
-    env_file: .env_file
     environment:
       - MODE=wsgi
     depends_on:
       - memcached
       - rabbitmq
-      - celerybeat
-      - celery
       - postgres
     ports: # ubuntu port = conteiner port
       - "8000:8000"
       - "9000:9000"
     volumes: # ubuntu dir = conteiner dir (applied change)
       - ./:/srv/project
+    <<: *x-defaults
 
   memcached:
     image: memcached:1.6.8
     container_name: memcached
-    tty: true
-    stdin_open: true
-    restart: always
+    <<: *x-defaults
 
   redis:
     image: redis:latest
     container_name: redis
-    tty: true
-    expose:
-      - '6379'
-    stdin_open: true
-    restart: always
+    <<: *x-defaults
 
   rabbitmq:
     image: rabbitmq:3.8-rc-management
     container_name: rabbitmq
-    tty: true
-    stdin_open: true
-    env_file: .env_file
-    restart: always
     ports: 
       - "15672:15672" # RabbitMQ admin
+    <<: *x-defaults
 
   postgres:
     image: postgres:12.3-alpine
     container_name: postgres
-    env_file: .env_file
-    restart: always
     ports: 
       - "5432:5432" # connect from vs
     volumes:
       - db_data:/var/lib/postgresql/data # постоянное хранилище
+    <<: *x-defaults
   
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
-    env_file: .env_file
-    restart: always
     depends_on:
       - postgres
     ports: 
       - "5555:80"
+    <<: *x-defaults
 
   celery:
     build: .
     container_name: celery
-    tty: true
-    stdin_open: true
-    restart: always
-    env_file: .env_file
     environment:
       - MODE=celery
     depends_on:
@@ -97,31 +82,29 @@ services:
       - rabbitmq
     volumes:
       - ./:/srv/project 
+    <<: *x-defaults
 
   celerybeat:
     build: .
     container_name: celerybeat
-    tty: true
-    stdin_open: true
-    restart: always
-    env_file: .env_file
     environment:
       - MODE=celerybeat
     depends_on:
       - rabbitmq
     volumes: # ubuntu dir = conteiner dir (applied change)
       - ./:/srv/project
+    <<: *x-defaults
 
   portainer:
     image: portainer/portainer
     command: -H unix:///var/run/docker.sock
-    restart: always
     ports:
       - 9100:9000
       - 8100:8000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+    <<: *x-defaults
 
 volumes:
   db_data: {}
