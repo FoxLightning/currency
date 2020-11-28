@@ -6,7 +6,7 @@
       <br><br><br>
       <a href="{% url 'account:password_change' pk=user.id %}">Chenge password</a>
       <form action="" method='POST'>
-        {% csrf_token %} 
+        {% csrf_token %}
         {{ form.as_p}}
         <button type="submit" class="btn btn-primary">Primary</button>
       </form>

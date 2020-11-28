@@ -125,6 +125,7 @@ def addsub(request):
 
 class LatestRates(View):
     def get(self, request):
+        breakpoint()
         context = {'rate_list': last_rates()}
         return render(request, 'rate/latest-rates.html', context=context)
 
