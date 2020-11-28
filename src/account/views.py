@@ -1,11 +1,12 @@
 import os
 
-from account.forms import UserRegistrationForm
+from account.forms import UserRegistrationForm, UserPassChenge
 from account.models import User
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.contrib.auth.views import LogoutView, LoginView
 from django.views.generic import CreateView, UpdateView, View
 
 

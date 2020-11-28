@@ -12,8 +12,8 @@ migrate:
 
 collectstatic:
 	docker exec -it backend python ./src/manage.py collectstatic --noinput && \
-	docker cp backend:/tmp/static_content/static /tmp/static && \
-	docker cp /tmp/static nginx:/etc/nginx/static
+	sudo docker cp backend:/tmp/static_content/static /tmp/static && \
+	sudo docker cp /tmp/static nginx:/etc/nginx/static
 
 start:
 	cp -n .env_file .env && docker-compose up --build -d
