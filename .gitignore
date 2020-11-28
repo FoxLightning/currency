@@ -4,3 +4,5 @@ passwords.py
 static_content/
 .pytest_cache/
 **/__pycache__/
+**/db.sqlite3
+**/celerybeat-schedule
