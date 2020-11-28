@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div class='row'>
+    <div class='col'>
+      <a href="{% url 'rate:downloadallrates' %}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Download</a>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Delete</th>
+            <th scope="col">Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in avatar_list %}
+          <tr>
+            <td> Edit </td>
+
+            <td><img 
+              src={{ row.file_path.url }} 
+              alt={{ row.file_path.url }}>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content%}

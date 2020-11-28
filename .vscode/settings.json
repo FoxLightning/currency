@@ -18,11 +18,22 @@
             "server": "localhost",
             "port": 5432,
             "driver": "PostgreSQL",
-            "name": "DB_PG",
-            "username": "currency",
+            "name": "postgres",
+            "database": "currency",
             "password": "jsdo47d2YRTw24Asdf",
-            "database": "currency"
+            "username": "currency"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "password": "jsdo47d2YRTw24Asdf",
+            "database": "currency",
+            "username": "currency",
+            "name": "postgres"
         }
     ],
     "sqltools.useNodeRuntime": true,
+    "python.pythonPath": "/usr/bin/python3",
 }

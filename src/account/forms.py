@@ -1,4 +1,4 @@
-from account.models import User
+from account.models import Avatar, User
 from account.tasks import send_sign_up_email
 
 from django import forms
@@ -83,3 +83,23 @@ class UserPassChenge(forms.ModelForm):
         self.instance.set_password(self.cleaned_data['password1'])
         self.instance.save()
         return self.instance
+
+
+def user_avatar_upload(instance, filename):
+    return f'{instance.user_id}/{filename}'
+
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ('file_path',)
+
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        instance = super().save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        return instance
