@@ -22,7 +22,13 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
 
+choice = ((1, 1,),)
+
+
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     file_path = models.FileField(upload_to=user_avatar_upload)
-    
+    active_avatar = models.BooleanField(null=True)
+
+    class Meta:
+        unique_together = ('user', 'active_avatar',)

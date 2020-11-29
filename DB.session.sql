@@ -1,1 +1,0 @@
-SELECT * FROM rate_rate ORDER BY id

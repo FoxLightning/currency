@@ -85,10 +85,6 @@ class UserPassChenge(forms.ModelForm):
         return self.instance
 
 
-def user_avatar_upload(instance, filename):
-    return f'{instance.user_id}/{filename}'
-
-
 class AvatarForm(forms.ModelForm):
     class Meta:
         model = Avatar
