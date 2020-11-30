@@ -70,3 +70,4 @@ wcwidth==0.2.5
 xlwt==1.3.0
 psycopg2==2.8.6
 flower
+django-db-signals

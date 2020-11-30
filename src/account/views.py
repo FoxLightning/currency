@@ -1,10 +1,8 @@
 import os
-import shutil
 
-from currency.settings import MEDIA_ROOT
-
-from account.forms import AvatarForm, UserRegistrationForm, UserPassChenge
+from account.forms import AvatarForm, UserPassChenge, UserRegistrationForm
 from account.models import Avatar, User
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -14,13 +12,8 @@ from django.http import HttpResponseRedirect
 
 
 def set_active_avatar(model, user, avatar):
-    current_user_avatars = model.objects.filter(user=user)
-    for i in current_user_avatars:
-        i.active_avatar = None
-        i.save()
-    set_active_avatar = current_user_avatars.get(id=avatar)
-    set_active_avatar.active_avatar = True
-    set_active_avatar.save()
+    model.objects.filter(user=user, active_avatar=True).update(active_avatar=None)
+    model.objects.filter(user=user).filter(id=avatar).update(active_avatar=True)
 
 
 class MyProfile(LoginRequiredMixin, UpdateView):
@@ -35,7 +28,7 @@ class MyProfile(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class SignOut(LogoutView):
+class SignOut(LoginRequiredMixin, LogoutView):
     success_url = reverse_lazy('index')
     template_name = os.path.join('account', 'user_sign_out.html')
 
@@ -63,7 +56,7 @@ class ActivateUser(View):
         return redirect('index')
 
 
-class UserPasswordChange(UpdateView):
+class UserPasswordChange(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserPassChenge
     template_name = os.path.join('account', 'user_password_change.html')
@@ -85,40 +78,34 @@ class CreateUserAvatar(LoginRequiredMixin, CreateView):
         return super().get_success_url()
 
 
-class AvatarList(ListView):
+class AvatarList(LoginRequiredMixin, ListView):
     def get_queryset(self):
-        breakpoint()
         return self.request.user.avatar_set.all()
 
 
-class SetActiveAvatar(View):
+class SetActiveAvatar(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
         set_active_avatar(Avatar, self.request.user, kwargs['pk'])
         return redirect('account:myprofile')
 
 
-class DeleteAvatar(DeleteView):
-    def get_object(self):
-        avatar_id = self.kwargs.get('pk')
-        return get_object_or_404(Avatar, id=avatar_id)
-
-    def post(self, request, *args, **kwargs):
-        delete_object = Avatar.objects.get(id=kwargs['pk'])
-        delete_path = delete_object.file_path.path
-        os.remove(delete_path)
-        return self.delete(request, *args, **kwargs)
-
+class DeleteAvatar(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('account:avatar_list')
 
+    def get_object(self):
+        avatar_id = self.kwargs.get('pk')
+        avatar = get_object_or_404(Avatar, id=avatar_id)
+        if avatar.user.id == self.request.user.id:
+            return avatar
 
-class DeleteAllAvatar(DeleteView):
+
+class DeleteAllAvatar(LoginRequiredMixin, DeleteView):
     queryset = User.objects.all()
     template_name = 'account/deleteall_avatars_confirm.html'
+    success_url = reverse_lazy('account:avatar_list')
 
     def delete(self, request, *args, **kwargs):
-        avatar_owner = self.get_queryset().get(id=self.kwargs['pk'])
-        all_user_avatars = avatar_owner.avatar_set.all()
-        del_dir = MEDIA_ROOT + '/' + str(self.kwargs['pk'])
+        user = self.request.user
+        all_user_avatars = user.avatar_set.all()
         all_user_avatars.delete()
-        shutil.rmtree(del_dir)
-        return HttpResponseRedirect(reverse_lazy('account:avatar_list'))
+        return HttpResponseRedirect(self.success_url)

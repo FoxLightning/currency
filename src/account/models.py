@@ -21,6 +21,12 @@ class User(AbstractUser):
             self.username = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
+    @property
+    def get_avatar_url(self):
+        avatar = self.avatar_set.get(active_avatar=True)
+        image_url = avatar.file_path.url
+        return image_url
+
 
 choice = ((1, 1,),)
 
