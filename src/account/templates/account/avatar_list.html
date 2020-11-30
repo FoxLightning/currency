@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content%}
+  <div class='row'>
+    <div class='col'>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"><a href="{% url 'account:delete_all' pk=user.id %}">Delete All</a></th>
+            <th scope="col"><a href="{% url 'account:avatar_create' pk=user.id %}">Add Avatar</a></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in avatar_list %}
+          <tr>
+            <td>
+              Active: {{ row.active_avatar }} 
+              <br>
+              <a href='{% url "account:avatar_active" pk=row.id %}'>Main</a> 
+              <br>
+              <a href='{% url "account:avatar_delete" pk=row.id %}'>Delete</a> 
+            </td>
+
+            <td><img 
+              src={{ row.file_path.url }} 
+              alt={{ row.file_path.url }}
+              width="400" 
+              height="400"
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content%}

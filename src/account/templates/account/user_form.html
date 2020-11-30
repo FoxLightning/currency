@@ -3,13 +3,20 @@
 {% block content %}
   <div class="row">
     <div class="col">
-      <br><br><br>
       <a href="{% url 'account:password_change' pk=user.id %}">Chenge password</a>
       <form action="" method='POST'>
         {% csrf_token %}
         {{ form.as_p}}
         <button type="submit" class="btn btn-primary">Primary</button>
       </form>
+    </div>
+    <div class="col">
+      <br>
+      <img src={{avatar.file_path.url}} alt={{avatar.file_path.url}} width="400" height="400"><br>
+      
+      <a href="{% url 'account:avatar_list' %}">List</a><br>
+      
+      <a href="{% url 'account:avatar_create' pk=user.id %}">Upload</a><br>
     </div>
   </div>
 {% endblock content %}
