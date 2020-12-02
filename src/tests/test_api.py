@@ -10,8 +10,8 @@ import pytest
 
 api_name_list = [
     'api-rate:rate-list',
-    'api-account:account-list'
-    'api-account:user-list'
+    'api-account:account-list',
+    'api-account:user-list',
 ]
 
 @pytest.mark.parametrize("api", api_name_list)
