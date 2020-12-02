@@ -14,9 +14,10 @@
             <th scope="col">Sale</th>
             <th scope="col">Last update</th>
             {% if user.is_superuser %}
-              <th scope="col">
-                <a href="" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">+</a>
-                <a href="" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">&#128190;</a>
+            <th scope="col">id</th>
+            <th scope="col">
+              <a href="" class="btn btn-primary btn-sm active" role="button" aria-pressed="true"> &#10133 </a>
+                <a href="{% url 'rate:downloadallrates' %}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">&#128190;</a>
               </th>
             {% endif %}
           </tr>
@@ -31,11 +32,11 @@
             <td>{{ row.sale }}</td>
             <td>{{ row.created }}</td>
             {% if user.is_superuser %}
-
-              <th>
+              <td>{{ row.id }}</td>
+              <td>
                 <a href="{% url 'rate:updaterate' row.id %}" class="btn btn-warning btn-sm active" role="button" aria-pressed="true">✏</a>
                 <a href="{% url 'rate:deleterate' row.id %}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">🗑</a>
-              </th>
+              </td>
             {% endif %}
 
           </tr>

@@ -6,6 +6,7 @@ from . import views
 
 app_name = 'rate'
 
+
 urlpatterns = [
     path('list/', views.RateListView.as_view(), name='list'),
     path('contactus/list', views.ContactUsListView.as_view(), name='contactuslist'),
@@ -19,7 +20,8 @@ urlpatterns = [
     path('latestrates/', views.LatestRates.as_view(), name='latestrates'),
     path('downloadlatestrates/', views.DownloadLatestRates.as_view(), name='downloadlatestrates'),
     path('downloadallrates/', views.DownloadAllRates.as_view(), name='downloadallrates'),
-    path('deleterate/<pk>', views.DeleteRate.as_view(), name='deleterate'),
-    path('updaterate/<pk>', views.UpdateRate.as_view(), name='updaterate'),
+    path('deleterate/<int:pk>', views.DeleteRate.as_view(), name='deleterate'),
+    path('updaterate/<int:pk>', views.UpdateRate.as_view(), name='updaterate'),
+    # TODO create reate
 
 ]
