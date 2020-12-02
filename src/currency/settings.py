@@ -65,9 +65,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # extensions
+    # dev
     'debug_toolbar',
     'django_extensions',
+    # prodaction
     'crispy_forms',
+    'rest_framework',
+    'drf_yasg',
 
     # extension registration
     # 'allauth',
@@ -288,3 +292,17 @@ if DEBUG:
 else:
     # for rabitmq in pytest
     CELERY_TASK_ALWAYS_EAGER = True
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 30
+}

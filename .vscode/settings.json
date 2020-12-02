@@ -55,5 +55,6 @@
         }
     ],
     "sqltools.useNodeRuntime": true,
-    "python.pythonPath": "/usr/bin/python3",
+    "python.pythonPath": "env/bin/python",
+    
 }

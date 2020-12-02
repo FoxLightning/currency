@@ -4,7 +4,6 @@ from django.shortcuts import redirect, render, render_to_response
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView, View
 
-
 from .forms import SubscriptionForm
 from .models import ContactUs, Feedback, Rate, Subscription
 from .tasks import send_email_async
@@ -125,7 +124,6 @@ def addsub(request):
 
 class LatestRates(View):
     def get(self, request):
-        breakpoint()
         context = {'rate_list': last_rates()}
         return render(request, 'rate/latest-rates.html', context=context)
 

@@ -27,3 +27,9 @@ shell:
 
 wtf:
 	docker logs --tail all backend
+
+urls:
+	docker exec -it backend python3 src/manage.py show_urls
+
+test:
+	docker exec -it backend pytest ./src/tests
