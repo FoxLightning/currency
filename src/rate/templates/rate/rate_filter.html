@@ -1,20 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block content%}
+
+{% block content %}
   <div class='row'>
-    <div class='col'>
+    <div class='col-3'>
+      {% include 'parts/filters.html' %}
+      <br>
+      <br>
       <a href="{% url 'rate:downloadallrates' %}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Download</a>
+    </div>
+    <div class='col-9'>
+  
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">№</th>
+            <th scope="col">id</th>
             <th scope="col">Currency</th>
             <th scope="col">Source</th>
             <th scope="col">Buy</th>
             <th scope="col">Sale</th>
             <th scope="col">Last update</th>
             {% if user.is_superuser %}
-            <th scope="col">id</th>
             <th scope="col">
               <a href="" class="btn btn-primary btn-sm active" role="button" aria-pressed="true"> &#10133 </a>
                 <a href="{% url 'rate:downloadallrates' %}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">&#128190;</a>
@@ -25,24 +32,29 @@
         <tbody>
           {% for row in rate_list %}
           <tr>
-            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ row.id }}</td>
             <td>{{ row.get_currency_display }}</td>
             <td>{{ row.get_source_display }}</td>
             <td>{{ row.buy }}</td>
             <td>{{ row.sale }}</td>
             <td>{{ row.created }}</td>
             {% if user.is_superuser %}
-              <td>{{ row.id }}</td>
               <td>
                 <a href="{% url 'rate:updaterate' row.id %}" class="btn btn-warning btn-sm active" role="button" aria-pressed="true">✏</a>
                 <a href="{% url 'rate:deleterate' row.id %}" class="btn btn-danger btn-sm active" role="button" aria-pressed="true">🗑</a>
               </td>
             {% endif %}
-
+  
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      
+      {% include 'parts/pagination.html' %}
+
+
+
+
     </div>
   </div>
-{% endblock content%}
+{% endblock content %}

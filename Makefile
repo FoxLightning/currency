@@ -33,3 +33,6 @@ urls:
 
 test:
 	docker exec -it backend pytest ./src/tests
+
+freeze:
+	docker exec -it backend pip freeze > requirements.txt
