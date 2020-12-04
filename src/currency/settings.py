@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     # prodaction
+    'django_filters',
     'crispy_forms',
     'rest_framework',
     'drf_yasg',

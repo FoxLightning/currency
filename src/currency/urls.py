@@ -55,7 +55,7 @@ urlpatterns = [
 
     # django password recovery
     path('account/', include('django.contrib.auth.urls')),
-    path('account/signup', SignUp.as_view(), name='signup'),
+    path('account/signup/', SignUp.as_view(), name='signup'),
 
     # API
     path('api/v1/rates/', include('rate.api.urls'))

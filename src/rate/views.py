@@ -9,9 +9,26 @@ from .models import ContactUs, Feedback, Rate, Subscription
 from .tasks import send_email_async
 from .utils import create_xml, last_rates
 
+from django_filters.views import FilterView
+from rate.filters import RateFilter
 
-class RateListView(ListView):
-    queryset = Rate.objects.all().order_by('-id')
+
+class RateListView(FilterView):
+    queryset = Rate.objects.all()
+    paginate_by = 10
+    filterset_class = RateFilter
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        for key, value in self.request.GET.items():
+            context[key] = value
+        context['GET_PARAMS'] = '&'.join(
+            f'{key}={value}'
+            for key, value in self.request.GET.items()
+            if key != 'page'
+        )
+        context['object_count'] = context['object_list'].count()
+        return context
 
 
 class ContactUsListView(ListView):
