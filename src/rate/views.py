@@ -20,6 +20,8 @@ class RateListView(FilterView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        for key, value in self.request.GET.items():
+            context[key] = value
         context['GET_PARAMS'] = '&'.join(
             f'{key}={value}'
             for key, value in self.request.GET.items()

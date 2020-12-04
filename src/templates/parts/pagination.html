@@ -18,7 +18,12 @@
     </ul>
 </nav>
 
-<form accept="?page={{ page_obj.next_page_number }}&{{ GET_PARAMS }}" method="get">
-    <input type="number" name="page" value="{{ page_obj.number }}"><br>
+<form method="get">
+    GOTO
+    <input type="number" name="page" value="{{ number }}">
     <input type="submit" value="Submit">
+    <input type="hidden" name="source" value="{{ source }}">
+    <input type="hidden" name="currency" value="{{ currency  }}">
+    <input type="hidden" name="sale" value="{{ sale }}">
+    <input type="hidden" name="crated_day" value="{{ crated_day }}">
 </form> 
