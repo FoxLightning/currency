@@ -1,6 +1,22 @@
-from account.models import User
+from account.models import User, Avatar
 
 from django.contrib import admin
 
 
-admin.site.register(User)
+class AvatarInline(admin.TabularInline):
+    model = Avatar
+    extra = 1
+
+
+class UserAdmin(admin.ModelAdmin):
+    inlines = (AvatarInline, )
+
+
+class AvatarAdmin(admin.ModelAdmin):
+    raw_id_fields = ['user', ]
+    list_display = ('id', 'user')
+    list_select_related = ['user']  # Avatar.objects.select_related('user')
+
+
+admin.site.register(User, UserAdmin)
+admin.site.register(Avatar, AvatarAdmin)

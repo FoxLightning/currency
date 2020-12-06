@@ -36,3 +36,6 @@ test:
 
 freeze:
 	docker exec -it backend pip freeze > requirements.txt
+
+flake8:
+	docker exec -it backend flake8 src
