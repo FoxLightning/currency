@@ -24,7 +24,6 @@ class Rate(models.Model):
         ]
 
 
-
 class ContactUs(models.Model):
     email = models.EmailField()
     subject = models.CharField(max_length=128)
@@ -36,7 +35,6 @@ class ContactUs(models.Model):
     class Meta:
         verbose_name = "Massage"
         verbose_name_plural = "Massages"
-
 
 
 class Feedback(models.Model):

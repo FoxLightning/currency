@@ -1,7 +1,7 @@
-from rest_framework import viewsets
-
 from account.api.serializers import AvatarSerializer, UserSerializer
 from account.models import Avatar, User
+
+from rest_framework import viewsets
 
 
 class AvatarAPIViewSet(viewsets.ModelViewSet):

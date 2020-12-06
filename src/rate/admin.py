@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ContactUs, Feedback, Rate, Subscription
+from .models import Rate
 
 
 class RateAdmin(admin.ModelAdmin):
@@ -14,8 +14,6 @@ class RateAdmin(admin.ModelAdmin):
     list_filter = [
         'currency',
         'source',
-       # 'buy',
-       # 'sale',
         'created',
     ]
     readonly_fields = [

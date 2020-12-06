@@ -1,4 +1,4 @@
-from account.models import User, Avatar
+from account.models import Avatar, User
 
 from django.contrib import admin
 
