@@ -27,6 +27,11 @@ class User(AbstractUser):
         image_url = avatar.file_path.url
         return image_url
 
+    class Meta:
+        permissions = [
+            ("full_edit", "full edit")
+        ]
+
 
 choice = ((1, 1,),)
 
