@@ -24,9 +24,28 @@ def last_rates() -> list:
     """
     query = Rate.objects.raw(
         """
-        SELECT id, source, currency, buy, sale, MAX(created)
-        FROM rate_rate
-        GROUP BY source, currency, id
+        SELECT
+            r.id,
+            r.source,
+            r.currency,
+            r.buy,
+            r.sale,
+            r.created
+        FROM
+            rate_rate AS r INNER JOIN (
+                SELECT
+                    source,
+                    currency,
+                    MAX(created) as created
+                FROM
+                    rate_rate
+                GROUP BY
+                    source,
+                    currency
+            ) as q
+            ON r.source = q.source
+            AND r.currency = q.currency
+            AND r.created = q.created
         """
     )
     return list(query)
