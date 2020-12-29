@@ -34,7 +34,7 @@ class UserAdmin(admin.ModelAdmin):
     ]
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.has_perm('admin.full_edit') \
+        if request.user.has_perm('rate.full_edit') \
                 or request.user.is_superuser:
             return ()
         return super().get_readonly_fields(request, obj=obj)
