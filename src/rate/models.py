@@ -13,11 +13,15 @@ class Rate(models.Model):
 
     def __str__(self):
         # max recursion depth if i try to use get_source_display
-        return f"{self.source} {self.currency}"
+        # по индексу обращаться тоже не особо круто, TODO довести до ума
+        return f"{choices.SOURCE_CHOICES[self.source-1][0]} {choices.CURRENCY_CHOICES[self.currency-1]}"
 
     class Meta:
         verbose_name = "Rate"
         verbose_name_plural = "Rates"
+        permissions = [
+            ("full_edit", "full edit")
+        ]
 
 
 class ContactUs(models.Model):

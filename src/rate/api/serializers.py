@@ -1,6 +1,6 @@
-from rest_framework import serializers
-
 from rate.models import Rate
+
+from rest_framework import serializers
 
 
 class RateSerializer(serializers.ModelSerializer):

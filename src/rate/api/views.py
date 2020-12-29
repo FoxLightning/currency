@@ -1,7 +1,7 @@
-from rest_framework import viewsets
-
 from rate.api.serializers import RateSerializer
 from rate.models import Rate
+
+from rest_framework import viewsets
 
 
 class RateAPIViewSet(viewsets.ModelViewSet):

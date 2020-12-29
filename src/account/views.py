@@ -4,11 +4,11 @@ from account.forms import AvatarForm, UserPassChenge, UserRegistrationForm
 from account.models import Avatar, User
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LogoutView, LoginView
-from django.views.generic import CreateView, UpdateView, View, ListView, DeleteView
-from django.http import HttpResponseRedirect
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView, View
 
 
 def set_active_avatar(model, user, avatar):

@@ -4,13 +4,14 @@ from django.shortcuts import redirect, render, render_to_response
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, TemplateView, UpdateView, View
 
+from django_filters.views import FilterView
+
+from rate.filters import RateFilter
+
 from .forms import SubscriptionForm
 from .models import ContactUs, Feedback, Rate, Subscription
 from .tasks import send_email_async
 from .utils import create_xml, last_rates
-
-from django_filters.views import FilterView
-from rate.filters import RateFilter
 
 
 class RateListView(FilterView):

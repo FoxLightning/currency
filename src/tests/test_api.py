@@ -1,11 +1,10 @@
-from django.test import TestCase
-from rest_framework import status
-from rest_framework.reverse import reverse
-from rest_framework.test import APIClient
-
 from account.models import User
 
 import pytest
+
+from rest_framework import status
+from rest_framework.reverse import reverse
+from rest_framework.test import APIClient
 
 
 api_name_list = [
@@ -13,6 +12,7 @@ api_name_list = [
     'api-account:account-list',
     'api-account:user-list',
 ]
+
 
 @pytest.mark.parametrize("api", api_name_list)
 def test_api_client_auth(api):
