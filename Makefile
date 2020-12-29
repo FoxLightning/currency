@@ -18,7 +18,7 @@ collectstatic:
 
 start:
 	docker-compose down && \
-	cp -n .env .env && docker-compose up --build -d
+	cp -n .env .env && docker-compose up --build
 
 build: start migrate collectstatic
 
